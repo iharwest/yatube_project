@@ -1,0 +1,40 @@
+{% load static %}
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a class="navbar-brand" href="{% url 'posts:index' %}">
+        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+      </a>
+      {% with request.resolver_match.view_name as view_name %}
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li class="nav-item"> 
+          <a class="nav-link px-2 {% if view_name  == 'about:author' %}text-secondary{% else %}text-white{% endif %}"
+            href="{% url 'about:author' %}">Об авторе</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-2 {% if view_name  == 'about:tech' %}text-secondary{% else %}text-white{% endif %}"
+            href="{% url 'about:tech' %}">Технологии</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item"> 
+          <a class="nav-link px-2 {% if view_name  == 'posts:post_create' %}text-secondary{% else %}text-white{% endif %}" 
+            href="{% url 'posts:post_create' %}">Новая запись</a>
+        </li>
+      </ul>
+          <a class="nav-link px-2 {% if view_name  == 'users:password_change' %}text-secondary{% else %}text-white{% endif %}" 
+            href="{% url 'users:password_change' %}">Изменить пароль</a>
+          <a class="nav-link px-2 {% if view_name  == 'users:logout' %}text-secondary{% else %}text-danger{% endif %}" 
+            href="{% url 'users:logout' %}">Выйти</a>
+          <a class="nav-link px-2 link-warning" href="{% url 'posts:profile' request.user.username %}">
+            {{ request.user.username }}</a>
+        {% else %}
+          <a class="nav-link px-2 {% if view_name  == 'users:login' %}text-secondary{% else %}text-white{% endif %}" 
+            href="{% url 'users:login' %}">Войти</a>
+          <a class="nav-link px-2 {% if view_name  == 'users:signup' %}text-secondary{% else %}text-warning{% endif %}" 
+            href="{% url 'users:signup' %}">Регистрация</a>
+        {% endif %}
+      {% endwith %}
+      </ul>
+    </div>
+  </div>
+</header>

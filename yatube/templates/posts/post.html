@@ -1,0 +1,50 @@
+{% load thumbnail %}
+<div class="row">
+  <aside class="col-12 col-md-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Дата публикации: {{ posts.created|date:"d E Y" }}
+      </li>
+      {% if posts.group.slug %}
+        <li class="list-group-item">
+          Группа: 
+          <a class="text-dark" href="{% url 'posts:group_list' posts.group.slug %}">
+            {{ posts.group.title }}
+          </a>
+        </li>
+      {% endif %}
+      <li class="list-group-item">
+        Автор: 
+        {% if posts.author.get_full_name %}
+          {{ posts.author.get_full_name }} 
+        {% else %}
+          {{ posts.author.username }}
+        {% endif %}
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        Всего постов автора: {{ amount }}
+      </li>
+      <li class="list-group-item">
+        {% if posts.author %}
+          <a class="text-dark" href="{% url 'posts:profile' posts.author.username %}">
+            Все посты пользователя
+          </a>
+        {% endif %} 
+      </li>
+    </ul>
+  </aside>
+  <article class="col-12 col-md-9">
+    {% thumbnail posts.image "960x339" crop="center" upscale=True as im %}
+      <img class="card-img my-2" src="{{ im.url }}">
+    {% endthumbnail %}
+    <p>{{ posts.text|linebreaksbr }}</p>
+    {% if user.id == posts.author.id %}
+    <div class="container p-2">          
+      <a class="btn btn-dark" href="{% url 'posts:post_edit' posts.id %}">
+        Редактировать
+      </a>
+    </div>
+    {% endif %}
+    {% include 'posts/includes/comments.html' %}
+  </article>
+</div> 
